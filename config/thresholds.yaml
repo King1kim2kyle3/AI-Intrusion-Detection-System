@@ -1,0 +1,163 @@
+# Detection Thresholds for AI-Powered IDS
+
+# Global Thresholds
+global:
+  default_anomaly_threshold: 0.5
+  high_confidence_threshold: 0.85
+  medium_confidence_threshold: 0.7
+  low_confidence_threshold: 0.5
+
+# Model-Specific Thresholds
+models:
+  random_forest:
+    anomaly_threshold: 0.55
+    confidence_threshold: 0.75
+    min_samples_for_alert: 1
+  
+  xgboost:
+    anomaly_threshold: 0.50
+    confidence_threshold: 0.80
+    min_samples_for_alert: 1
+  
+  neural_network:
+    anomaly_threshold: 0.52
+    confidence_threshold: 0.78
+    min_samples_for_alert: 1
+  
+  ensemble:
+    anomaly_threshold: 0.50
+    confidence_threshold: 0.82
+    agreement_threshold: 2  # Min number of models agreeing
+    voting_strategy: "soft"  # soft, hard
+
+# Attack Type Specific Thresholds
+attack_types:
+  backdoor:
+    severity: "CRITICAL"
+    threshold: 0.60
+    response_action: "block_ip"
+    auto_response: true
+  
+  dos:
+    severity: "HIGH"
+    threshold: 0.55
+    response_action: "rate_limit"
+    auto_response: true
+  
+  ddos:
+    severity: "CRITICAL"
+    threshold: 0.65
+    response_action: "block_ip"
+    auto_response: true
+  
+  exploits:
+    severity: "CRITICAL"
+    threshold: 0.60
+    response_action: "block_ip"
+    auto_response: true
+  
+  fuzzers:
+    severity: "HIGH"
+    threshold: 0.55
+    response_action: "alert"
+    auto_response: false
+  
+  generic:
+    severity: "MEDIUM"
+    threshold: 0.50
+    response_action: "log"
+    auto_response: false
+  
+  reconnaissance:
+    severity: "MEDIUM"
+    threshold: 0.52
+    response_action: "alert"
+    auto_response: false
+  
+  shellcode:
+    severity: "CRITICAL"
+    threshold: 0.70
+    response_action: "block_ip"
+    auto_response: true
+  
+  worms:
+    severity: "CRITICAL"
+    threshold: 0.65
+    response_action: "block_ip"
+    auto_response: true
+
+# Alert Severity Levels
+severity:
+  INFO:
+    threshold: 0.40
+    action: "log"
+    notify: false
+    retention_days: 30
+  
+  LOW:
+    threshold: 0.45
+    action: "log"
+    notify: false
+    retention_days: 60
+  
+  MEDIUM:
+    threshold: 0.55
+    action: "alert"
+    notify: true
+    retention_days: 90
+  
+  HIGH:
+    threshold: 0.70
+    action: "block"
+    notify: true
+    retention_days: 180
+  
+  CRITICAL:
+    threshold: 0.85
+    action: "immediate_block"
+    notify: true
+    retention_days: 365
+
+# Rate Limiting Thresholds
+rate_limiting:
+  alerts_per_minute: 100
+  alerts_per_hour: 5000
+  unique_ips_per_minute: 50
+  connection_attempts_per_second: 100
+  alert_suppression_window: 300  # seconds
+
+# Statistical Anomaly Thresholds
+anomaly_detection:
+  zscore_threshold: 3.0
+  isolation_forest_contamination: 0.05
+  local_outlier_factor_threshold: 1.5
+  statistical_threshold: 0.99  # 99th percentile
+
+# Performance Thresholds
+performance:
+  min_model_accuracy: 0.90
+  min_precision: 0.85
+  min_recall: 0.80
+  min_f1_score: 0.82
+  max_inference_time_ms: 100
+  max_alert_latency_ms: 500
+
+# Network Thresholds
+network:
+  suspicious_port_threshold: 50
+  high_traffic_threshold_mbps: 1000
+  connection_rate_threshold_per_second: 10000
+  packet_loss_threshold: 0.05  # 5%
+
+# Temporal Thresholds
+temporal:
+  alert_aggregation_window: 60  # seconds
+  offline_period_before_alert: 300  # seconds
+  model_retraining_interval: 604800  # 7 days
+  stale_model_warning: 1209600  # 14 days
+
+# False Positive Thresholds
+false_positive:
+  fpr_threshold: 0.05  # 5% false positive rate
+  allow_repeated_alerts_for_same_ip: false
+  repeat_alert_suppression_time: 3600  # 1 hour
