@@ -1,0 +1,279 @@
+# AI-Powered Intrusion Detection System Configuration
+
+# System Settings
+system:
+  name: "AI-IDS"
+  version: "1.0.0"
+  mode: "production"  # development, production, testing
+  debug: false
+  log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+
+# Data Configuration
+data:
+  dataset_type: "unsw-nb15"  # kdd99, unsw-nb15, cicids2017, nsl-kdd
+  data_path: "data/processed/"
+  raw_data_path: "data/raw/"
+  train_split: 0.8
+  validation_split: 0.1
+  test_split: 0.1
+  normalize: true
+  feature_selection: true
+  encoding: "labelencoding"  # onehotencoding, labelencoding
+
+# Feature Engineering
+features:
+  scale_features: true
+  scaler_type: "standard"  # standard, minmax, robust
+  remove_duplicates: true
+  handle_missing_values: true
+  missing_strategy: "mean"  # mean, median, drop
+  feature_selection_method: "mutual_info"  # correlation, mutual_info, rfe
+
+# Model Configuration
+models:
+  ensemble_enabled: true
+  ensemble_method: "voting"  # voting, stacking, averaging
+  
+  # Random Forest Configuration
+  random_forest:
+    enabled: true
+    n_estimators: 100
+    max_depth: 15
+    min_samples_split: 5
+    min_samples_leaf: 2
+    random_state: 42
+    n_jobs: -1
+    class_weight: "balanced"
+  
+  # XGBoost Configuration
+  xgboost:
+    enabled: true
+    n_estimators: 100
+    max_depth: 7
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    random_state: 42
+    eval_metric: "logloss"
+    tree_method: "hist"
+  
+  # Neural Network Configuration
+  neural_network:
+    enabled: true
+    architecture: "deep"  # shallow, deep
+    input_dropout: 0.2
+    hidden_layers: [128, 64, 32]
+    hidden_activation: "relu"
+    output_activation: "sigmoid"
+    hidden_dropout: 0.3
+    batch_normalization: true
+    learning_rate: 0.001
+    batch_size: 32
+    epochs: 50
+    validation_split: 0.2
+    early_stopping: true
+    patience: 10
+    optimizer: "adam"
+    loss_function: "binary_crossentropy"
+
+# Training Configuration
+training:
+  random_seed: 42
+  use_class_weights: true
+  stratified_split: true
+  cross_validation: true
+  cv_folds: 5
+  hyperparameter_tuning: true
+  tuning_method: "grid_search"  # grid_search, random_search, bayesian
+  save_best_model: true
+  model_save_path: "models/saved_models/"
+
+# Detection Configuration
+detection:
+  # Detection thresholds
+  anomaly_threshold: 0.5  # Probability threshold for intrusion
+  confidence_threshold: 0.7  # Confidence level required
+  
+  # Detection modes
+  mode: "real-time"  # real-time, batch, streaming
+  inference_batch_size: 64
+  
+  # Real-time processing
+  packet_capture: true
+  packet_filter: "tcp or udp"
+  max_packet_size: 65535
+  timeout: 30
+  
+  # Caching & Performance
+  enable_model_caching: true
+  cache_ttl: 3600
+  enable_gpu: false
+
+# Alert Configuration
+alerts:
+  enabled: true
+  alert_level: "INFO"  # DEBUG, INFO, WARNING, CRITICAL
+  
+  # Alert Channels
+  channels:
+    email:
+      enabled: true
+      smtp_server: "smtp.gmail.com"
+      smtp_port: 587
+      sender_email: "your-email@gmail.com"
+      recipient_emails:
+        - "admin@company.com"
+        - "security@company.com"
+      use_tls: true
+    
+    slack:
+      enabled: false
+      webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+      channel: "#security-alerts"
+      mention_users: ["@admin"]
+    
+    syslog:
+      enabled: true
+      server: "localhost"
+      port: 514
+      facility: "LOG_LOCAL0"
+    
+    database:
+      enabled: true
+      connection_string: "postgresql://user:password@localhost/ids_db"
+      table_name: "alerts"
+  
+  # Alert Templates
+  alert_template: "default"  # default, detailed, minimal
+  include_packet_details: true
+  include_model_confidence: true
+
+# Response Configuration
+response:
+  enabled: true
+  auto_response: true
+  response_actions:
+    - type: "log"
+      enabled: true
+    - type: "email"
+      enabled: true
+    - type: "block_ip"
+      enabled: false
+      duration: 3600  # seconds
+    - type: "close_connection"
+      enabled: false
+    - type: "snapshot"
+      enabled: false
+      save_path: "logs/snapshots/"
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "json"  # json, text
+  file_path: "logs/"
+  log_file: "ids.log"
+  max_file_size: 104857600  # 100MB
+  backup_count: 10
+  console_output: true
+  detailed_errors: true
+  include_timestamps: true
+  include_source_location: true
+
+# Evaluation & Metrics
+evaluation:
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1_score"
+    - "roc_auc"
+    - "confusion_matrix"
+  
+  generate_reports: true
+  report_path: "evaluation/reports/"
+  plot_confusion_matrix: true
+  plot_roc_curve: true
+  plot_pr_curve: true
+  save_predictions: true
+
+# Deployment Configuration
+deployment:
+  environment: "production"  # development, staging, production
+  host: "0.0.0.0"
+  port: 5000
+  workers: 4
+  timeout: 30
+  enable_cors: true
+  
+  # Docker Configuration
+  docker:
+    enabled: false
+    image_name: "ids-system"
+    tag: "latest"
+  
+  # Kubernetes Configuration
+  kubernetes:
+    enabled: false
+    namespace: "security"
+    replicas: 3
+
+# API Configuration
+api:
+  enabled: true
+  base_url: "/api/v1"
+  endpoints:
+    - "/predict"
+    - "/train"
+    - "/evaluate"
+    - "/alerts"
+    - "/status"
+  authentication:
+    enabled: true
+    api_key_required: true
+    jwt_enabled: false
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+
+# Database Configuration
+database:
+  type: "postgresql"  # sqlite, postgresql, mysql
+  connection_string: "sqlite:///ids.db"
+  echo_sql: false
+  pool_size: 5
+  max_overflow: 10
+  pool_recycle: 3600
+
+# Performance Optimization
+performance:
+  enable_multiprocessing: true
+  num_workers: 4
+  batch_processing: true
+  batch_size: 64
+  enable_gpu: false
+  memory_limit_mb: 2048
+
+# Security
+security:
+  enable_encryption: true
+  encryption_algorithm: "AES-256"
+  api_key_length: 32
+  token_expiry: 3600
+  allow_localhost_only: false
+
+# Development Settings
+development:
+  debug: true
+  reload_on_change: true
+  test_mode: false
+  mock_data: false
+  verbose_output: true
+
+# Notification Preferences
+notifications:
+  email_on_threat: true
+  email_on_error: true
+  alert_frequency: "immediate"  # immediate, hourly, daily
+  digest_enabled: true
+  digest_time: "09:00"  # HH:MM format
+  digest_timezone: "UTC"
