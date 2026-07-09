@@ -1,0 +1,110 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+*.venv
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Data Files
+data/raw/
+data/processed/
+*.csv
+*.xlsx
+*.json
+data/*.pkl
+data/*.joblib
+
+# Models
+models/saved_models/
+models/*.pkl
+models/*.h5
+models/*.joblib
+models/checkpoints/
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Documentation
+docs/_build/
+site/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.temp
+*.tmp
+*.cache
+
+# Cache
+.cache/
+*.cache
+
+# Output directories
+output/
+results/
+exports/
+
+# Configuration sensitive files
+config/secrets.yaml
+config/.env
